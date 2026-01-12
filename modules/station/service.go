@@ -2,6 +2,7 @@ package station
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -10,6 +11,7 @@ import (
 
 type Service interface {
 	GetAllStations() (response []StationResponse, err error)
+	CheckScheduleByStations(id string) (response []ScheduleResponse, err error)
 }
 
 type service struct {
@@ -37,6 +39,9 @@ func (s *service) GetAllStations() (response []StationResponse, err error) {
 
 	var stations []Station
 	err = json.Unmarshal(byteResponse, &stations)
+	if err != nil {
+		return
+	}
 
 	// Response
 	for _, item := range stations {
@@ -46,4 +51,34 @@ func (s *service) GetAllStations() (response []StationResponse, err error) {
 		})
 	}
 	return
+}
+
+func (s *service) CheckScheduleByStations(id string) (response []ScheduleResponse, err error) {
+	// Layer Service
+	url := "https://www.jakartamrt.co.id/id/val/stasiuns"
+
+	// Hit URL
+	byteResponse, err := client.DoRequest(s.client, url)
+	if err != nil {
+		return
+	}
+
+	var schedules []Schedule
+	err = json.Unmarshal(byteResponse, &schedules)
+
+	// Response
+	var scheduleSelected Schedule
+	for _, item := range schedules {
+		if item.StationId == id {
+			scheduleSelected = item
+			break
+		}
+	}
+
+	if scheduleSelected.StationId == "" {
+		err = errors.New("Station not Found")
+		return
+	}
+	return
+
 }
