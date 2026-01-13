@@ -21,3 +21,7 @@ type ScheduleResponse struct {
 	StationName string `json:"station"`
 	Time        string `json:"time"`
 }
+
+func (s ScheduleResponse) Format(param1 string) {
+	panic("unimplemented")
+}

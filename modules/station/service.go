@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/MouslyCode/mrt-schedules/common/client"
@@ -79,6 +80,73 @@ func (s *service) CheckScheduleByStations(id string) (response []ScheduleRespons
 		err = errors.New("Station not Found")
 		return
 	}
+
+	response, err := ConvertDataToScheduleResponse(scheduleSelected)
+	if err != nil {
+		return
+	}
+
 	return
 
+}
+
+func ConvertDataToScheduleResponse(schedule Schedule) (response []ScheduleResponse, err error) {
+	var (
+		lebakBulusTripName = "Stasiun Lebak Bulus Grab"
+		bundaranHITripName = "Stasiun Bundaran HI Grab"
+	)
+
+	scheduleLebakBulus := schedule.ScheduleLebakBulus
+	scheduleBundaranHI := schedule.ScheduleBundaranHI
+
+	scheduleLebakBulusParsed, err := ConvertDataToScheduleResponse(scheduleLebakBulus)
+	if err != nil {
+		return 
+	}
+
+	scheduleBunderanHIParsed, err := ConvertDataToScheduleResponse(scheduleBundaranHI)
+	if err != nil {
+		return 
+	}
+
+	// convert to Response
+	// for _, item := range scheduleLebakBulusParsed {
+	// 	if item.Format("15:04") > time.Now().Format("15:04") {
+	// 		response = append(response, ScheduleResponse{
+	// 			StationName: lebakBulusTripName,
+	// 			Time: item.Format("15:04"),
+	// 		})
+	// 	}
+	// }
+
+	for _, item := range scheduleBunderanHIParsed {
+		if item.Format("15:04") > time.Now().Format("15:04") {
+			response = append(response, ScheduleResponse{
+				StationName: bundaranHITripName,
+				Time: item.Format("15:04"),
+			})
+		}
+	}
+	
+}
+
+func ConvertScheduleToTimeFormat(schedule string) (response []time.Time, err error) {
+	var (
+		parsedTime time.Time
+		schedules = strings.Split(schedule, "," )
+	)
+
+	for _, item := range schedules {
+		trimmedTime := strings.TrimSpace(item)
+		if trimmedTime == "" {
+			continue
+		}
+		parsedTime, err = time.Parse("15:04", trimmedTime)
+		if err != nil {
+			err = errors.New("Invalid Time Format" + trimmedTime)
+			return
+		}
+		response = append(response, parsedTime)
+	}
+	return
 }
