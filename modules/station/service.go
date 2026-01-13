@@ -111,19 +111,19 @@ func ConvertDataToResponse(schedule Schedule) (response []ScheduleResponse, err 
 
 	// convert to Response
 	for _, item := range scheduleLebakBulusParsed {
-		if item.Format("15:04") > time.Now().Format("15:04") {
+		if item.Format("15:04:05") > time.Now().Format("15:04:05") {
 			response = append(response, ScheduleResponse{
 				StationName: lebakBulusTripName,
-				Time:        item.Format("15:04"),
+				Time:        item.Format("15:04:05"),
 			})
 		}
 	}
 
 	for _, item := range scheduleBunderanHIParsed {
-		if item.Format("15:04") > time.Now().Format("15:04") {
+		if item.Format("15:04:05") > time.Now().Format("15:04:05") {
 			response = append(response, ScheduleResponse{
 				StationName: bundaranHITripName,
-				Time:        item.Format("15:04"),
+				Time:        item.Format("15:04:05"),
 			})
 		}
 	}
@@ -141,7 +141,7 @@ func ConvertScheduleToTimeFormat(schedule string) (response []time.Time, err err
 		if trimmedTime == "" {
 			continue
 		}
-		parsedTime, err = time.Parse("15:04", trimmedTime)
+		parsedTime, err = time.Parse("15:04:05", trimmedTime)
 		if err != nil {
 			err = errors.New("Invalid Time Format" + trimmedTime)
 			return

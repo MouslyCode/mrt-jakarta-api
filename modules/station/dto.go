@@ -1,7 +1,7 @@
 package station
 
 type Station struct {
-	Id   string `json:"uid"`
+	Id   string `json:"nid"`
 	Name string `json:"title"`
 }
 
@@ -11,7 +11,7 @@ type StationResponse struct {
 }
 
 type Schedule struct {
-	StationId          string `json:"uid"`
+	StationId          string `json:"nid"`
 	StationName        string `json:"title"`
 	ScheduleBundaranHI string `json:"jadwal_hi_biasa"`
 	ScheduleLebakBulus string `json:"jadwal_lb_biasa"`

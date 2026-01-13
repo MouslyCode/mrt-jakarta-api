@@ -17,7 +17,7 @@ func Initiate(router *gin.RouterGroup) {
 		GetAllStations(c, stationService)
 	})
 
-	station.GET(":/id", func(c *gin.Context) {
+	station.GET("/:id", func(c *gin.Context) {
 		CheckScheduleByStations(c, stationService)
 	})
 }
