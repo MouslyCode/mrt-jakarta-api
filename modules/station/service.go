@@ -81,7 +81,7 @@ func (s *service) CheckScheduleByStations(id string) (response []ScheduleRespons
 		return
 	}
 
-	response, err := ConvertDataToScheduleResponse(scheduleSelected)
+	response, err = ConvertDataToResponse(scheduleSelected)
 	if err != nil {
 		return
 	}
@@ -90,7 +90,7 @@ func (s *service) CheckScheduleByStations(id string) (response []ScheduleRespons
 
 }
 
-func ConvertDataToScheduleResponse(schedule Schedule) (response []ScheduleResponse, err error) {
+func ConvertDataToResponse(schedule Schedule) (response []ScheduleResponse, err error) {
 	var (
 		lebakBulusTripName = "Stasiun Lebak Bulus Grab"
 		bundaranHITripName = "Stasiun Bundaran HI Grab"
@@ -99,41 +99,41 @@ func ConvertDataToScheduleResponse(schedule Schedule) (response []ScheduleRespon
 	scheduleLebakBulus := schedule.ScheduleLebakBulus
 	scheduleBundaranHI := schedule.ScheduleBundaranHI
 
-	scheduleLebakBulusParsed, err := ConvertDataToScheduleResponse(scheduleLebakBulus)
+	scheduleLebakBulusParsed, err := ConvertScheduleToTimeFormat(scheduleLebakBulus)
 	if err != nil {
-		return 
+		return
 	}
 
-	scheduleBunderanHIParsed, err := ConvertDataToScheduleResponse(scheduleBundaranHI)
+	scheduleBunderanHIParsed, err := ConvertScheduleToTimeFormat(scheduleBundaranHI)
 	if err != nil {
-		return 
+		return
 	}
 
 	// convert to Response
-	// for _, item := range scheduleLebakBulusParsed {
-	// 	if item.Format("15:04") > time.Now().Format("15:04") {
-	// 		response = append(response, ScheduleResponse{
-	// 			StationName: lebakBulusTripName,
-	// 			Time: item.Format("15:04"),
-	// 		})
-	// 	}
-	// }
+	for _, item := range scheduleLebakBulusParsed {
+		if item.Format("15:04") > time.Now().Format("15:04") {
+			response = append(response, ScheduleResponse{
+				StationName: lebakBulusTripName,
+				Time:        item.Format("15:04"),
+			})
+		}
+	}
 
 	for _, item := range scheduleBunderanHIParsed {
 		if item.Format("15:04") > time.Now().Format("15:04") {
 			response = append(response, ScheduleResponse{
 				StationName: bundaranHITripName,
-				Time: item.Format("15:04"),
+				Time:        item.Format("15:04"),
 			})
 		}
 	}
-	
+	return
 }
 
 func ConvertScheduleToTimeFormat(schedule string) (response []time.Time, err error) {
 	var (
 		parsedTime time.Time
-		schedules = strings.Split(schedule, "," )
+		schedules  = strings.Split(schedule, ",")
 	)
 
 	for _, item := range schedules {
