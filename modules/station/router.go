@@ -20,6 +20,10 @@ func Initiate(router *gin.RouterGroup) {
 	station.GET("/:id", func(c *gin.Context) {
 		CheckScheduleByStations(c, stationService)
 	})
+
+	station.GET("/:id/estimate", func(c *gin.Context) {
+		CheckEstimateByStations(c, stationService)
+	})
 }
 
 func GetAllStations(c *gin.Context, service Service) {

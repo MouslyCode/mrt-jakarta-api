@@ -153,7 +153,24 @@ func ConvertScheduleToTimeFormat(schedule string) (response []time.Time, err err
 
 func (s *service) CheckEstimateByStations(id string) (respone []EstimateResponse, err error) {
 	// Layer Service
-	// url := "https://www.jakartamrt.co.id/id/val/stasiuns"
+	url := "https://www.jakartamrt.co.id/id/val/stasiuns"
+
+	// Hit URL
+	byteResponse, err := client.DoRequest(s.client, url)
+	if err != nil {
+		return
+	}
+
+	var estimate EstimateRequest
+	err = json.Unmarshal(byteResponse, &estimate)
+
+	// Response
+	for _, item := range estimate.Estimate {
+		respone = append(respone, EstimateResponse{
+			Fare: item.Fare,
+			Time: item.Time,
+		})
+	}
 
 	return
 }
