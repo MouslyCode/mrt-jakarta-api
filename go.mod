@@ -1,4 +1,4 @@
-module github.com/MouslyCode/mrt-schedules
+module github.com/MouslyCode/mrt-jakarta-api
 
 go 1.25.5
 

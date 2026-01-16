@@ -3,7 +3,7 @@ package station
 import (
 	"net/http"
 
-	"github.com/MouslyCode/mrt-schedules/common/response"
+	"github.com/MouslyCode/mrt-jakarta-api/common/response"
 	"github.com/gin-gonic/gin"
 )
 

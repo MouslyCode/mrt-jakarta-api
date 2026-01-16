@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/MouslyCode/mrt-schedules/common/client"
+	"github.com/MouslyCode/mrt-jakarta-api/common/client"
 )
 
 type Service interface {

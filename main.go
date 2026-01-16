@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/MouslyCode/mrt-schedules/modules/station"
+	"github.com/MouslyCode/mrt-jakarta-api/modules/station"
 	"github.com/gin-gonic/gin"
 )
 
