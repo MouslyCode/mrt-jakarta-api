@@ -13,7 +13,7 @@ import (
 type Service interface {
 	GetAllStations() (response []StationResponse, err error)
 	CheckScheduleByStations(id string) (response []ScheduleResponse, err error)
-	CheckEstimateByStations(id string) (response []EstimateResponse, err error)
+	CheckEstimateByStations(id string) (response []StationEstimateResponse, err error)
 }
 
 type service struct {
@@ -151,7 +151,7 @@ func ConvertScheduleToTimeFormat(schedule string) (response []time.Time, err err
 	return
 }
 
-func (s *service) CheckEstimateByStations(id string) (respone []EstimateResponse, err error) {
+func (s *service) CheckEstimateByStations(id string) (respone []StationEstimateResponse, err error) {
 	// Layer Service
 	url := "https://www.jakartamrt.co.id/id/val/stasiuns"
 
@@ -161,28 +161,37 @@ func (s *service) CheckEstimateByStations(id string) (respone []EstimateResponse
 		return
 	}
 
-	var stationEstimate []Station
+	var stationEstimate []StationEstimate
 	err = json.Unmarshal(byteResponse, &stationEstimate)
 
-	// Response
-	var estimateSelected Estimate
-	for _, station := range stationEstimate {
-		for _, estimate := range station.Estimate {
-			if estimate.StationId == station.Id {
-				estimateSelected = estimate
-				respone = append(respone, EstimateResponse{
-					StationName: station.Name,
-					Fare:        estimateSelected.Fare,
-					Time:        estimateSelected.Time,
-				})
-				break
-			}
+	var stationSelected StationEstimate
+	for _, item := range stationEstimate {
+		if item.StationId == id {
+			stationSelected = item
+			break
 		}
 	}
 
-	if estimateSelected.StationId == "" {
-		err = errors.New("Station not found")
+	if stationSelected.StationId == "" {
+		err = errors.New("Station Not Found")
+		return
+	}
+	// Response
+	respone, err = GetEstimateResponse(stationSelected)
+	if err != nil {
+		return
 	}
 
+	return
+}
+
+func GetEstimateResponse(station StationEstimate) (response []StationEstimateResponse, err error) {
+	for _, item := range station.StationEstimate {
+		if item.StationId == station.StationId {
+			response = append(response, StationEstimateResponse{
+				StationName: station.StationName,
+			})
+		}
+	}
 	return
 }

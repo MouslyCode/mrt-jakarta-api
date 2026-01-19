@@ -39,14 +39,16 @@ func GetAllStations(c *gin.Context, service Service) {
 			},
 		)
 		return
+	} else {
+		c.JSON(http.StatusOK, response.APIResponse{
+			Success: true,
+			Message: "Success Get All Stations",
+			Data:    datas,
+		})
 	}
 
 	// response
-	c.JSON(http.StatusOK, response.APIResponse{
-		Success: true,
-		Message: "Success Get All Stations",
-		Data:    datas,
-	})
+
 }
 
 func CheckScheduleByStations(c *gin.Context, service Service) {
@@ -59,13 +61,14 @@ func CheckScheduleByStations(c *gin.Context, service Service) {
 			Message: err.Error(),
 			Data:    nil,
 		})
+	} else {
+		c.JSON(http.StatusOK, response.APIResponse{
+			Success: true,
+			Message: "Success Get All Schedule",
+			Data:    datas,
+		})
 	}
 
-	c.JSON(http.StatusOK, response.APIResponse{
-		Success: true,
-		Message: "Success Get All Schedule",
-		Data:    datas,
-	})
 }
 
 func CheckEstimateByStations(c *gin.Context, service Service) {
@@ -78,11 +81,12 @@ func CheckEstimateByStations(c *gin.Context, service Service) {
 			Message: err.Error(),
 			Data:    nil,
 		})
+	} else {
+		c.JSON(http.StatusOK, response.APIResponse{
+			Success: true,
+			Message: "Succes Get Estimate From ",
+			Data:    datas,
+		})
 	}
 
-	c.JSON(http.StatusOK, response.APIResponse{
-		Success: true,
-		Message: "Succes Get Estimate From Station",
-		Data:    datas,
-	})
 }

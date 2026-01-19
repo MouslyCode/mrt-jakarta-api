@@ -1,9 +1,8 @@
 package station
 
 type Station struct {
-	Id       string     `json:"nid"`
-	Name     string     `json:"title"`
-	Estimate []Estimate `json:"estimasi"`
+	Id   string `json:"nid"`
+	Name string `json:"title"`
 }
 
 type StationResponse struct {
@@ -25,6 +24,17 @@ type ScheduleResponse struct {
 
 func (s ScheduleResponse) Format(param1 string) {
 	panic("unimplemented")
+}
+
+type StationEstimate struct {
+	StationId       string     `json:"nid"`
+	StationName     string     `json:"title"`
+	StationEstimate []Estimate `json:"estimasi"`
+}
+
+type StationEstimateResponse struct {
+	StationName string             `json:"station"`
+	Estimates   []EstimateResponse `json:"estimates"`
 }
 
 type Estimate struct {
