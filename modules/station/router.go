@@ -17,13 +17,18 @@ func Initiate(router *gin.RouterGroup) {
 		GetAllStations(c, stationService)
 	})
 
-	station.GET("/:id", func(c *gin.Context) {
+	station.GET("/:id/schedule", func(c *gin.Context) {
 		CheckScheduleByStations(c, stationService)
 	})
 
 	station.GET("/:id/estimate", func(c *gin.Context) {
 		CheckEstimateByStations(c, stationService)
 	})
+
+	station.GET("/:id/facility", func(c *gin.Context) {
+		CheckFacilityByStations(c, stationService)
+	})
+
 }
 
 func GetAllStations(c *gin.Context, service Service) {
@@ -84,7 +89,27 @@ func CheckEstimateByStations(c *gin.Context, service Service) {
 	} else {
 		c.JSON(http.StatusOK, response.APIResponse{
 			Success: true,
-			Message: "Succes Get Estimate From ",
+			Message: "Succes Get Estimate From Station",
+			Data:    datas,
+		})
+	}
+
+}
+
+func CheckFacilityByStations(c *gin.Context, service Service) {
+	id := c.Param("id")
+
+	datas, err := service.CheckFacilityByStations(id)
+	if err != nil {
+		c.JSON(http.StatusBadGateway, response.APIResponse{
+			Success: false,
+			Message: err.Error(),
+			Data:    nil,
+		})
+	} else {
+		c.JSON(http.StatusOK, response.APIResponse{
+			Success: true,
+			Message: "Success Get Facilities From Station",
 			Data:    datas,
 		})
 	}

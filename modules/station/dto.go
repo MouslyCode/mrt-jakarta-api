@@ -1,8 +1,10 @@
 package station
 
 type Station struct {
-	Id   string `json:"nid"`
-	Name string `json:"title"`
+	Id              string     `json:"nid"`
+	Name            string     `json:"title"`
+	StationEstimate []Estimate `json:"estimasi"`
+	StationFacility []Facility `json:"fasilitas"`
 }
 
 type StationResponse struct {
@@ -26,12 +28,6 @@ func (s ScheduleResponse) Format(param1 string) {
 	panic("unimplemented")
 }
 
-type StationEstimate struct {
-	StationId       string     `json:"nid"`
-	StationName     string     `json:"title"`
-	StationEstimate []Estimate `json:"estimasi"`
-}
-
 type StationEstimateResponse struct {
 	StationName string             `json:"station"`
 	Estimates   []EstimateResponse `json:"estimates"`
@@ -47,4 +43,22 @@ type EstimateResponse struct {
 	StationName string `json:"station"`
 	Fare        string `json:"fare"`
 	Time        string `json:"time"`
+}
+
+type Facility struct {
+	Id    string `json:"nid"`
+	Title string `json:"title"`
+	Type  string `json:"jenis_fasilitas"`
+	Img   string `json:"cover"`
+}
+
+type FacilityResponse struct {
+	Title string `json:"title"`
+	Type  string `json:"jenis_fasilitas"`
+	Img   string `json:"cover"`
+}
+
+type StationFacilityResponse struct {
+	StationName string             `json:"station"`
+	Facilities  []FacilityResponse `json:"Facilities"`
 }
